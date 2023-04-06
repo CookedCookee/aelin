@@ -87,6 +87,7 @@ contract BalancerVestAMM {
 
         // NOTE: Since this contract is not an approved relayer (https://github.com/balancer/balancer-v2-monorepo/blob/e3fb9a51e5d66ed7bdcf97ddfd5eced1ee40f8fe/pkg/interfaces/contracts/vault/IVault.sol#L348)
         // We need to pull the tokens from the sender into this contract before we can add liquidity.
+        // TODO: check possible attack vectors
         for (uint256 i; i < tokens.length; i++) {
             tokens[i].transferFrom(msg.sender, address(this), _tokensAmtsIn[i]);
         }

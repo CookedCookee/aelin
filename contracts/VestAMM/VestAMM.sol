@@ -379,23 +379,19 @@ contract VestAMM is AelinVestingToken, IVestAMM {
 
     // to create the pool and deposit assets after phase 0 ends
     // TODO create a struct here that should cover every AMM. If needed to support more add a second struct
-    function createInitialLiquidity(IBalancerPool.CreateNewPool _createPool, bytes memory _userData)
-        external
-        onlyHolder
-        lpFundingWindow
-    {
+    function createInitialLiquidity(IVestAMMLibrary.CreateNewPool _newPool) external onlyHolder lpFundingWindow {
         require(vAMMInfo.hasLiquidityLaunch, "only for new liquidity");
         // NOTE for this method we are going to want to pass in a lot of the arguments from
         // data stored in the contract. it won't be a pure pass through like we have now
         // at this stage in the development process
-        IVestAMMLibrary(ammData.ammLibrary).deployPool(_createPool, _userData);
+        IVestAMMLibrary(ammData.ammLibrary).deployPool(_newPool);
         finalizeVesting();
     }
 
     // to create the pool and deposit assets after phase 0 ends
-    function createLiquidity(IBalancerPool.AddLiquidity _addLiquidity) external onlyHolder lpFundingWindow {
+    function createLiquidity(IVestAMMLibrary.AddLiquidity _addLiquidityData) external onlyHolder lpFundingWindow {
         require(!vAMMInfo.hasLiquidityLaunche, "only for existing liquidity");
-        IVestAMMLibrary(ammData.ammLibrary).addLiquidity(_addLiquidity);
+        IVestAMMLibrary(ammData.ammLibrary).addLiquidity(_addLiquidityData);
         finalizeVesting();
     }
 
